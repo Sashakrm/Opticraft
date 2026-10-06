@@ -1,0 +1,234 @@
+cmake_minimum_required(VERSION 3.16)
+project(OptiCraft)
+
+# =============== Настройки ===============
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Без этого блока `cmake ..` без явного -DCMAKE_BUILD_TYPE собирает с -O0, то есть
+# вообще без оптимизаций. Для генератора мира, который состоит из вызовов шума,
+# это само по себе замедление в несколько раз.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Тип сборки" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+                 Debug Release RelWithDebInfo MinSizeRel)
+    message(STATUS "CMAKE_BUILD_TYPE не задан — используется Release")
+endif()
+
+# Нативные инструкции ускоряют шум, но собранный бинарник перестаёт запускаться
+# на более старых процессорах. По умолчанию выключено; включается через
+# -DOPTICRAFT_NATIVE_ARCH=ON, когда сборка только для своей машины.
+option(OPTICRAFT_NATIVE_ARCH "Оптимизировать под процессор сборочной машины" OFF)
+
+# Удобно для IDE (VS Code, CLion и т.д.)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# =============== Пути ===============
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+# =============== Все исходные файлы ===============
+set(SOURCES
+        main.cpp
+
+        # commands
+        ${SRC_DIR}/commands/Command_System.cpp
+
+        # core
+        ${SRC_DIR}/core/Application.cpp
+        ${SRC_DIR}/core/Game.cpp
+        ${SRC_DIR}/core/Day_Night_Cycle.cpp
+
+        # entities
+        ${SRC_DIR}/entities/Camera.cpp
+        ${SRC_DIR}/entities/Player.cpp
+        ${SRC_DIR}/entities/Inventory.cpp
+        ${SRC_DIR}/entities/Dropped_Item.cpp
+
+        # input
+        ${SRC_DIR}/input/Input_Manager.cpp
+
+        # rendering
+        ${SRC_DIR}/rendering/Mesh.cpp
+        ${SRC_DIR}/rendering/Renderer.cpp
+        ${SRC_DIR}/rendering/Shader.cpp
+        ${SRC_DIR}/rendering/Texture_Atlas.cpp
+        ${SRC_DIR}/rendering/Atlas_Registry.cpp
+
+        # utils
+        ${SRC_DIR}/utils/Logger.cpp
+        ${SRC_DIR}/utils/Json.cpp
+        ${SRC_DIR}/utils/Localization.cpp
+
+        # world
+        ${SRC_DIR}/world/Block.cpp
+        ${SRC_DIR}/world/Block_Entity.cpp
+        ${SRC_DIR}/world/Block_Entity_Store.cpp
+        ${SRC_DIR}/world/Recipe.cpp
+        ${SRC_DIR}/world/Crop_Manager.cpp
+        ${SRC_DIR}/world/Smelting.cpp
+        ${SRC_DIR}/world/Region_File.cpp
+        ${SRC_DIR}/world/Biome.cpp
+        ${SRC_DIR}/world/Block_Interaction.cpp
+        ${SRC_DIR}/world/Chunk.cpp
+        ${SRC_DIR}/world/Chunk_Manager.cpp
+        ${SRC_DIR}/world/Generation_Type.cpp
+        ${SRC_DIR}/world/Structures.cpp
+        ${SRC_DIR}/world/Tree_Generator.cpp
+        ${SRC_DIR}/world/World_Generator.cpp
+        ${SRC_DIR}/world/World_File.cpp
+
+        # world generation noise
+        ${SRC_DIR}/world/OpenSimplex2S.c
+
+        # physics
+        ${SRC_DIR}/physics/Raycast.cpp
+
+        # hud
+        ${SRC_DIR}/hud/Hud.cpp
+        ${SRC_DIR}/hud/Hud_Screens.cpp
+        ${SRC_DIR}/hud/Panel_Layouts.cpp
+
+        # mobs
+        ${SRC_DIR}/mobs/Mob_Model.cpp
+        ${SRC_DIR}/mobs/Mob.cpp
+
+        # entities/AI
+        ${SRC_DIR}/entities/AI/Pig_AI.cpp
+        ${SRC_DIR}/entities/Pig.cpp
+        ${SRC_DIR}/entities/Cow.cpp
+        ${SRC_DIR}/entities/AI/Horse_AI.cpp
+        ${SRC_DIR}/entities/Horse.cpp
+)
+
+set(PLATFORM_SOURCES
+        ${SRC_DIR}/core/Events.cpp
+        ${SRC_DIR}/core/Window.cpp
+        ${SRC_DIR}/world/Block_Types.cpp
+        ${SRC_DIR}/utils/Texture.cpp
+)
+
+set(THIRD_PARTY_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/gl.c
+)
+
+# =============== Создаём исполняемый файл ===============
+add_executable(${PROJECT_NAME}
+        ${SOURCES}
+        ${PLATFORM_SOURCES}
+        ${THIRD_PARTY_SOURCES}
+)
+
+# Добавляем заголовочные файлы (чтобы они отображались в IDE)
+target_sources(${PROJECT_NAME} PRIVATE
+        ${SRC_DIR}/commands/Command_System.h
+        ${SRC_DIR}/core/Application.h
+        ${SRC_DIR}/core/Events.h
+        ${SRC_DIR}/core/Game.h
+        ${SRC_DIR}/core/Window.h
+
+        ${SRC_DIR}/entities/Camera.h
+        ${SRC_DIR}/entities/Player.h
+        ${SRC_DIR}/entities/Dropped_Item.h
+
+        ${SRC_DIR}/input/Input_Call_Backs.h
+        ${SRC_DIR}/input/Input_Manager.h
+
+        ${SRC_DIR}/rendering/Mesh.h
+        ${SRC_DIR}/rendering/Frustum.h
+        ${SRC_DIR}/rendering/Renderer.h
+        ${SRC_DIR}/rendering/Shader.h
+        ${SRC_DIR}/rendering/Texture_Atlas.h
+        ${SRC_DIR}/rendering/Atlas_Registry.h
+
+        ${SRC_DIR}/utils/Config.h
+        ${SRC_DIR}/utils/Hash_Utils.h
+        ${SRC_DIR}/utils/Logger.h
+        ${SRC_DIR}/utils/Math_Helpers.h
+        ${SRC_DIR}/utils/PerlinNoise.h
+        ${SRC_DIR}/utils/Texture.h
+        ${SRC_DIR}/utils/Json.h
+        ${SRC_DIR}/utils/Localization.h
+
+        ${SRC_DIR}/world/Block.h
+        ${SRC_DIR}/world/Block_Entity.h
+        ${SRC_DIR}/world/Block_Entity_Store.h
+        ${SRC_DIR}/world/Recipe.h
+        ${SRC_DIR}/world/Smelting.h
+        ${SRC_DIR}/world/Container_Session.h
+        ${SRC_DIR}/world/Block_Types.h
+        ${SRC_DIR}/world/Biome.h
+        ${SRC_DIR}/world/Block_Interaction.h
+        ${SRC_DIR}/world/Chunk.h
+        ${SRC_DIR}/world/Chunk_Manager.h
+        ${SRC_DIR}/world/Generation_Type.h
+        ${SRC_DIR}/world/Structures.h
+        ${SRC_DIR}/world/Tree_Generator.h
+        ${SRC_DIR}/world/World_Generator.h
+        ${SRC_DIR}/world/World_File.h
+        ${SRC_DIR}/world/Region_File.h
+        ${SRC_DIR}/world/OpenSimplex2S.h
+
+        ${SRC_DIR}/physics/Raycast.h
+
+        ${SRC_DIR}/hud/Hud.h
+        ${SRC_DIR}/hud/Panel_Layouts.h
+
+        ${SRC_DIR}/mobs/Mob_Model.h
+        ${SRC_DIR}/mobs/Mob.h
+
+        ${SRC_DIR}/entities/AI/Pig_AI.h
+        ${SRC_DIR}/entities/Pig.h
+        ${SRC_DIR}/entities/AI/Horse_AI.h
+        ${SRC_DIR}/entities/Horse.h
+)
+
+# =============== Флаги оптимизации ===============
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CONFIG:Release>:/O2 /fp:fast>)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+            $<$<CONFIG:Release>:-O3>
+            $<$<CONFIG:RelWithDebInfo>:-O2>)
+    if(OPTICRAFT_NATIVE_ARCH)
+        target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
+    endif()
+endif()
+
+# =============== Include directories ===============
+target_include_directories(${PROJECT_NAME} PRIVATE
+        ${SRC_DIR}                          # для #include "core/..."
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/stb
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/cgltf
+)
+
+# =============== Библиотеки ===============
+find_package(OpenGL REQUIRED)
+
+# GLFW (ищем системную)
+find_package(glfw3 REQUIRED QUIET)
+
+if(UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+    find_package(Threads REQUIRED)
+endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        OpenGL::GL
+        glfw
+        ${X11_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${CMAKE_DL_LIBS}        # для dlopen (нужен glad на Linux)
+)
+
+# =============== Копирование ассетов после сборки ===============
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
+        COMMENT "Копирование папки assets в директорию сборки"
+)
+
+# =============== Финальное сообщение ===============
+message(STATUS "✅ OptiCraft configured successfully with modern structure!")

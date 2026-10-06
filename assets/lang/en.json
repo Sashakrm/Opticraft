@@ -1,0 +1,56 @@
+{
+  "language.name": "English",
+
+  "common.cancel": "Cancel",
+  "common.delete": "Delete",
+  "common.done": "Done",
+
+  "mode.survival": "Survival",
+  "mode.creative": "Creative",
+  "world_type.classic": "Classic",
+  "world_type.islands": "Islands",
+
+  "menu.subtitle": "Voxel Sandbox",
+  "menu.singleplayer": "Singleplayer",
+  "menu.options": "Options",
+  "menu.quit": "Quit Game",
+
+  "worlds.title": "Select World",
+  "worlds.play": "Play World",
+  "worlds.create": "Create New World",
+  "worlds.empty": "No worlds yet - create one!",
+  "worlds.delete_title": "Delete this world?",
+  "worlds.delete_warning": "'{0}' will be lost forever!",
+  "worlds.detail": "{0} Mode, {1}, seed {2}",
+
+  "create.title": "Create New World",
+  "create.world_name": "World Name",
+  "create.world_name_default": "New World",
+  "create.seed": "Seed (leave blank for random)",
+  "create.game_mode": "Game Mode: {0}",
+  "create.world_type": "World Type: {0}",
+
+  "pause.title": "Game Menu",
+  "pause.back": "Back to Game",
+  "pause.save_quit": "Save and Quit to Title",
+
+  "loading.title": "Loading world",
+
+  "options.title": "Options",
+  "options.render_distance": "Render Dist",
+  "options.flora_distance": "Flora Dist",
+  "options.sensitivity": "Sensitivity",
+  "options.gui_scale": "GUI Scale: {0}",
+  "options.gui_scale_auto": "Auto",
+  "options.language": "Language: {0}",
+  "options.world": "World: {0}",
+  "options.mode": "Mode: {0}",
+
+  "panel.inventory": "Inventory",
+  "panel.creative_inventory": "Creative Inventory",
+  "panel.crafting": "Crafting",
+  "panel.chest": "Chest",
+  "panel.large_chest": "Large Chest",
+  "panel.furnace": "Furnace",
+  "panel.page": "Page {0} / {1}"
+}

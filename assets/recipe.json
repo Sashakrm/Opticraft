@@ -1,0 +1,658 @@
+{
+  "tags": {
+    "planks": [
+      "Oak Planks",
+      "Birch Planks",
+      "Spruce Planks",
+      "Jungle Planks",
+      "Acacia Planks"
+    ],
+    "logs": [
+      "Oak Wood",
+      "Oak Log",
+      "Birch Log",
+      "Spruce Log",
+      "Jungle Log",
+      "Acacia Log",
+      "Slimewood Log"
+    ]
+  },
+  "recipes": [
+    {
+      "name": "planks_from_oak_wood",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Oak Wood",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Oak Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_oak_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Oak Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Oak Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_birch_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Birch Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Birch Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_spruce_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Spruce Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Spruce Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_jungle_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Jungle Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Jungle Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_acacia_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Acacia Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Acacia Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "planks_from_slimewood_log",
+      "type": "shapeless",
+      "ingredients": [
+        {
+          "item": "Slimewood Log",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "Oak Planks",
+        "count": 4
+      }
+    },
+    {
+      "name": "stick",
+      "type": "shaped",
+      "pattern": [
+        "P",
+        "P"
+      ],
+      "key": {
+        "P": "#planks"
+      },
+      "output": {
+        "item": "Stick",
+        "count": 4
+      }
+    },
+    {
+      "name": "crafting_table",
+      "type": "shaped",
+      "pattern": [
+        "PP",
+        "PP"
+      ],
+      "key": {
+        "P": "#planks"
+      },
+      "output": {
+        "item": "Crafting Table",
+        "count": 1
+      }
+    },
+    {
+      "name": "chest",
+      "type": "shaped",
+      "pattern": [
+        "PPP",
+        "P P",
+        "PPP"
+      ],
+      "key": {
+        "P": "#planks"
+      },
+      "output": {
+        "item": "Chest",
+        "count": 1
+      }
+    },
+    {
+      "name": "furnace",
+      "type": "shaped",
+      "pattern": [
+        "SSS",
+        "S S",
+        "SSS"
+      ],
+      "key": {
+        "S": "Stone"
+      },
+      "output": {
+        "item": "Furnace",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_pickaxe",
+      "type": "shaped",
+      "pattern": [
+        "MMM",
+        " S ",
+        " S "
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Pickaxe",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_axe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "MS",
+        " S"
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_axe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "SM",
+        "S "
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_shovel",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "S",
+        "S"
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Shovel",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_sword",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "M",
+        "S"
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Sword",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_hoe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        " S",
+        " S"
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "wooden_hoe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "S ",
+        "S "
+      ],
+      "key": {
+        "M": "#planks",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Wooden Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_pickaxe",
+      "type": "shaped",
+      "pattern": [
+        "MMM",
+        " S ",
+        " S "
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Pickaxe",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_axe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "MS",
+        " S"
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_axe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "SM",
+        "S "
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_shovel",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "S",
+        "S"
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Shovel",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_sword",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "M",
+        "S"
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Sword",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_hoe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        " S",
+        " S"
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "stone_hoe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "S ",
+        "S "
+      ],
+      "key": {
+        "M": "Stone",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Stone Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_pickaxe",
+      "type": "shaped",
+      "pattern": [
+        "MMM",
+        " S ",
+        " S "
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Pickaxe",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_axe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "MS",
+        " S"
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_axe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "SM",
+        "S "
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_shovel",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "S",
+        "S"
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Shovel",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_sword",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "M",
+        "S"
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Sword",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_hoe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        " S",
+        " S"
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "iron_hoe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "S ",
+        "S "
+      ],
+      "key": {
+        "M": "Iron Ingot",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Iron Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_pickaxe",
+      "type": "shaped",
+      "pattern": [
+        "MMM",
+        " S ",
+        " S "
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Pickaxe",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_axe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "MS",
+        " S"
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_axe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "SM",
+        "S "
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Axe",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_shovel",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "S",
+        "S"
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Shovel",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_sword",
+      "type": "shaped",
+      "pattern": [
+        "M",
+        "M",
+        "S"
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Sword",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_hoe",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        " S",
+        " S"
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Hoe",
+        "count": 1
+      }
+    },
+    {
+      "name": "diamond_hoe_mirrored",
+      "type": "shaped",
+      "pattern": [
+        "MM",
+        "S ",
+        "S "
+      ],
+      "key": {
+        "M": "Diamond",
+        "S": "Stick"
+      },
+      "output": {
+        "item": "Diamond Hoe",
+        "count": 1
+      }
+    }
+  ]
+}

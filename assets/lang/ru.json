@@ -1,0 +1,56 @@
+{
+  "language.name": "Русский",
+
+  "common.cancel": "Отмена",
+  "common.delete": "Удалить",
+  "common.done": "Готово",
+
+  "mode.survival": "Выживание",
+  "mode.creative": "Творчество",
+  "world_type.classic": "Классика",
+  "world_type.islands": "Острова",
+
+  "menu.subtitle": "Воксельная песочница",
+  "menu.singleplayer": "Одиночная игра",
+  "menu.options": "Настройки",
+  "menu.quit": "Выйти из игры",
+
+  "worlds.title": "Выбор мира",
+  "worlds.play": "Играть",
+  "worlds.create": "Создать новый мир",
+  "worlds.empty": "Миров пока нет - создайте!",
+  "worlds.delete_title": "Удалить этот мир?",
+  "worlds.delete_warning": "Мир '{0}' будет удалён навсегда!",
+  "worlds.detail": "{0}, {1}, зерно {2}",
+
+  "create.title": "Создание мира",
+  "create.world_name": "Название мира",
+  "create.world_name_default": "Новый мир",
+  "create.seed": "Зерно (пусто - случайное)",
+  "create.game_mode": "Режим: {0}",
+  "create.world_type": "Тип мира: {0}",
+
+  "pause.title": "Меню игры",
+  "pause.back": "Вернуться в игру",
+  "pause.save_quit": "Сохранить и выйти",
+
+  "loading.title": "Загрузка мира",
+
+  "options.title": "Настройки",
+  "options.render_distance": "Дальность",
+  "options.flora_distance": "Дальн. растений",
+  "options.sensitivity": "Чувствит.",
+  "options.gui_scale": "Масштаб: {0}",
+  "options.gui_scale_auto": "Авто",
+  "options.language": "Язык: {0}",
+  "options.world": "Мир: {0}",
+  "options.mode": "Режим: {0}",
+
+  "panel.inventory": "Инвентарь",
+  "panel.creative_inventory": "Творческий инвентарь",
+  "panel.crafting": "Крафт",
+  "panel.chest": "Сундук",
+  "panel.large_chest": "Большой сундук",
+  "panel.furnace": "Печь",
+  "panel.page": "Страница {0} / {1}"
+}

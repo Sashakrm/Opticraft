@@ -1,0 +1,142 @@
+{
+  "smelting": [
+    {
+      "input": "Raw Porkchop",
+      "output": "Cooked Porkchop",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Oak Wood",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Oak Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Birch Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Spruce Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Jungle Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Acacia Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Slimewood Log",
+      "output": "Charcoal",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Raw Beef",
+      "output": "Cooked Beef",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Raw Horse Meat",
+      "output": "Cooked Horse Meat",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Iron Ore",
+      "output": "Iron Ingot",
+      "count": 1,
+      "time": 10
+    },
+    {
+      "input": "Gold Ore",
+      "output": "Gold Ingot",
+      "count": 1,
+      "time": 10
+    }
+  ],
+  "fuels": [
+    {
+      "item": "Charcoal",
+      "burn_time": 80
+    },
+    {
+      "item": "Oak Wood",
+      "burn_time": 15
+    },
+    {
+      "item": "Oak Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Birch Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Spruce Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Jungle Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Acacia Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Slimewood Log",
+      "burn_time": 15
+    },
+    {
+      "item": "Oak Planks",
+      "burn_time": 15
+    },
+    {
+      "item": "Birch Planks",
+      "burn_time": 15
+    },
+    {
+      "item": "Spruce Planks",
+      "burn_time": 15
+    },
+    {
+      "item": "Jungle Planks",
+      "burn_time": 15
+    },
+    {
+      "item": "Acacia Planks",
+      "burn_time": 15
+    },
+    {
+      "item": "Crafting Table",
+      "burn_time": 15
+    },
+    {
+      "item": "Chest",
+      "burn_time": 15
+    },
+    {
+      "item": "Stick",
+      "burn_time": 5
+    }
+  ]
+}

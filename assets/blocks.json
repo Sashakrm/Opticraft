@@ -1,0 +1,1967 @@
+{
+  "reserved_block_ids": [
+    8
+  ],
+  "blocks": [
+    {
+      "id": 0,
+      "name": "Air",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Gas",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "air",
+        "side": "air",
+        "bottom": "air"
+      }
+    },
+    {
+      "id": 1,
+      "name": "Grass",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "drop": "Dirt",
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "grass_top",
+        "side": "grass_side",
+        "bottom": "dirt"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 2,
+      "name": "Dirt",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "dirt",
+        "side": "dirt",
+        "bottom": "dirt"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 3,
+      "name": "Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "stone",
+        "side": "stone",
+        "bottom": "stone"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 4,
+      "name": "Sand",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "sand",
+        "side": "sand",
+        "bottom": "sand"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 5,
+      "name": "Oak Wood",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "oak_log_top",
+        "side": "oak_log_side",
+        "bottom": "oak_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 6,
+      "name": "Blocky",
+      "solid": true,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "oak_leaves",
+        "side": "oak_leaves",
+        "bottom": "oak_leaves"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Water",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 100.0,
+      "mesh_type": "Liquid",
+      "mesh_style": "Block",
+      "state": "Liquid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "water",
+        "side": "water",
+        "bottom": "water"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Rose",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "rose",
+        "side": "rose",
+        "bottom": "rose"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Tall Grass",
+      "drop": "Wheat Seeds",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tall_grass",
+        "side": "tall_grass",
+        "bottom": "tall_grass"
+      },
+      "drop_chance": 0.125,
+      "drop_count": 1
+    },
+    {
+      "id": 11,
+      "name": "Sun Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "light_emission": 14,
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "sun_stone",
+        "side": "sun_stone",
+        "bottom": "sun_stone"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 12,
+      "name": "Red Sand",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "red_sand",
+        "side": "red_sand",
+        "bottom": "red_sand"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 13,
+      "name": "Gravel",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "gravel",
+        "side": "gravel",
+        "bottom": "gravel"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 14,
+      "name": "Snow Block",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 0.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "snow_block",
+        "side": "snow_block",
+        "bottom": "snow_block"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 15,
+      "name": "Birch Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "birch_log_top",
+        "side": "birch_log_side",
+        "bottom": "birch_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 16,
+      "name": "Birch Planks",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "birch_planks",
+        "side": "birch_planks",
+        "bottom": "birch_planks"
+      },
+      "effective_tool": "axe"
+    },
+    {
+      "id": 17,
+      "name": "Birch Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "birch_leaves",
+        "side": "birch_leaves",
+        "bottom": "birch_leaves"
+      }
+    },
+    {
+      "id": 18,
+      "name": "Spruce Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "spruce_log_top",
+        "side": "spruce_log_side",
+        "bottom": "spruce_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 19,
+      "name": "Spruce Planks",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "spruce_planks",
+        "side": "spruce_planks",
+        "bottom": "spruce_planks"
+      },
+      "effective_tool": "axe"
+    },
+    {
+      "id": 20,
+      "name": "Spruce Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "spruce_leaves",
+        "side": "spruce_leaves",
+        "bottom": "spruce_leaves"
+      }
+    },
+    {
+      "id": 21,
+      "name": "Jungle Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "jungle_log_top",
+        "side": "jungle_log_side",
+        "bottom": "jungle_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 22,
+      "name": "Jungle Planks",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "jungle_planks",
+        "side": "jungle_planks",
+        "bottom": "jungle_planks"
+      },
+      "effective_tool": "axe"
+    },
+    {
+      "id": 23,
+      "name": "Jungle Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "jungle_leaves",
+        "side": "jungle_leaves",
+        "bottom": "jungle_leaves"
+      }
+    },
+    {
+      "id": 24,
+      "name": "Acacia Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "acacia_log_top",
+        "side": "acacia_log_side",
+        "bottom": "acacia_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 25,
+      "name": "Acacia Planks",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "acacia_planks",
+        "side": "acacia_planks",
+        "bottom": "acacia_planks"
+      },
+      "effective_tool": "axe"
+    },
+    {
+      "id": 26,
+      "name": "Acacia Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "acacia_leaves",
+        "side": "acacia_leaves",
+        "bottom": "acacia_leaves"
+      }
+    },
+    {
+      "id": 27,
+      "name": "Slimewood Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "slimewood_log_top",
+        "side": "slimewood_log_side",
+        "bottom": "slimewood_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 28,
+      "name": "Slimewood Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "slimewood_leaves",
+        "side": "slimewood_leaves",
+        "bottom": "slimewood_leaves"
+      }
+    },
+    {
+      "id": 29,
+      "name": "Tall Grass",
+      "drop": "Wheat Seeds",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tall_grass_dense",
+        "side": "tall_grass_dense",
+        "bottom": "tall_grass_dense"
+      },
+      "drop_chance": 0.125,
+      "drop_count": 1
+    },
+    {
+      "id": 30,
+      "name": "Fern",
+      "drop": "Wheat Seeds",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "fern",
+        "side": "fern",
+        "bottom": "fern"
+      },
+      "drop_chance": 0.125,
+      "drop_count": 1
+    },
+    {
+      "id": 31,
+      "name": "Flower",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "flower",
+        "side": "flower",
+        "bottom": "flower"
+      }
+    },
+    {
+      "id": 32,
+      "name": "Moss",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "moss",
+        "side": "moss",
+        "bottom": "moss"
+      }
+    },
+    {
+      "id": 33,
+      "name": "Mushroom",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "mushroom",
+        "side": "mushroom",
+        "bottom": "mushroom"
+      }
+    },
+    {
+      "id": 34,
+      "name": "Root",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "root",
+        "side": "root",
+        "bottom": "root"
+      }
+    },
+    {
+      "id": 35,
+      "name": "Glow Berry",
+      "solid": false,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "glow_berry",
+        "side": "glow_berry",
+        "bottom": "glow_berry"
+      }
+    },
+    {
+      "id": 36,
+      "name": "Mossy Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "mossy_stone",
+        "side": "mossy_stone",
+        "bottom": "mossy_stone"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 37,
+      "name": "Iron Ore",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "iron_ore",
+        "side": "iron_ore",
+        "bottom": "iron_ore"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 2
+    },
+    {
+      "id": 38,
+      "name": "Gold Ore",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "gold_ore",
+        "side": "gold_ore",
+        "bottom": "gold_ore"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 3
+    },
+    {
+      "id": 39,
+      "name": "Rare Mineral",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 4.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "rare_mineral",
+        "side": "rare_mineral",
+        "bottom": "rare_mineral"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 3
+    },
+    {
+      "id": 40,
+      "name": "Cave Crystal",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "cave_crystal",
+        "side": "cave_crystal",
+        "bottom": "cave_crystal"
+      }
+    },
+    {
+      "id": 41,
+      "name": "Slime Grass",
+      "solid": false,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "slime_grass",
+        "side": "slime_grass",
+        "bottom": "slime_grass"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 42,
+      "name": "Slime Block",
+      "solid": true,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.8,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "slime_block",
+        "side": "slime_block",
+        "bottom": "slime_block"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 43,
+      "name": "Deep Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "deep_stone",
+        "side": "deep_stone",
+        "bottom": "deep_stone"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 2
+    },
+    {
+      "id": 44,
+      "name": "Lava Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "lava_stone",
+        "side": "lava_stone",
+        "bottom": "lava_stone"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 2
+    },
+    {
+      "id": 45,
+      "name": "Cave Vine",
+      "solid": false,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "cave_vine",
+        "side": "cave_vine",
+        "bottom": "cave_vine"
+      }
+    },
+    {
+      "id": 46,
+      "name": "Mud",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 0.4,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "mud",
+        "side": "mud",
+        "bottom": "mud"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 47,
+      "name": "Wet Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.7,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "wet_stone",
+        "side": "wet_stone",
+        "bottom": "wet_stone"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 48,
+      "name": "Cloud Stone",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 1.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "cloud_stone",
+        "side": "cloud_stone",
+        "bottom": "cloud_stone"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 49,
+      "name": "Ice",
+      "solid": true,
+      "opaque": false,
+      "can_update": false,
+      "hardness": 0.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "ice",
+        "side": "ice",
+        "bottom": "ice"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 50,
+      "name": "Chest",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "chest_top",
+        "side": "chest_side",
+        "bottom": "oak_planks",
+        "front": "chest_front"
+      },
+      "orientation": "facing",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 51,
+      "name": "Crafting Table",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "crafting_top",
+        "side": "crafting_side",
+        "bottom": "oak_planks",
+        "front": "crafting_front"
+      },
+      "orientation": "facing",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 52,
+      "name": "Furnace",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.5,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "furnace_top",
+        "side": "furnace_side",
+        "bottom": "furnace_top",
+        "front": "furnace_front"
+      },
+      "orientation": "facing",
+      "active_texture": {
+        "atlas": "blocks_main",
+        "front": "furnace_front_on"
+      },
+      "effective_tool": "pickaxe"
+    },
+    {
+      "id": 53,
+      "name": "Raw Porkchop",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "food": 3,
+      "saturation": 1.8,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_raw_porkchop",
+        "side": "item_raw_porkchop",
+        "bottom": "item_raw_porkchop"
+      }
+    },
+    {
+      "id": 54,
+      "name": "Cooked Porkchop",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "food": 8,
+      "saturation": 12.8,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_cooked_porkchop",
+        "side": "item_cooked_porkchop",
+        "bottom": "item_cooked_porkchop"
+      }
+    },
+    {
+      "id": 55,
+      "name": "Charcoal",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_charcoal",
+        "side": "item_charcoal",
+        "bottom": "item_charcoal"
+      }
+    },
+    {
+      "id": 56,
+      "name": "Oak Log",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "oak_log_top",
+        "side": "oak_log_side",
+        "bottom": "oak_log_top"
+      },
+      "orientation": "axis",
+      "effective_tool": "axe"
+    },
+    {
+      "id": 57,
+      "name": "Oak Planks",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 2.0,
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "oak_planks",
+        "side": "oak_planks",
+        "bottom": "oak_planks"
+      },
+      "effective_tool": "axe"
+    },
+    {
+      "id": 58,
+      "name": "Oak Leaves",
+      "solid": true,
+      "opaque": false,
+      "can_update": true,
+      "hardness": 0.2,
+      "mesh_type": "Flora",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "oak_leaves",
+        "side": "oak_leaves",
+        "bottom": "oak_leaves"
+      }
+    },
+    {
+      "id": 59,
+      "name": "Farmland",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 0.6,
+      "drop": "Dirt",
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "farmland_dry",
+        "side": "dirt",
+        "bottom": "dirt"
+      },
+      "effective_tool": "shovel"
+    },
+    {
+      "id": 60,
+      "name": "Farmland Wet",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 0.6,
+      "drop": "Dirt",
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "farmland_wet",
+        "side": "dirt",
+        "bottom": "dirt"
+      },
+      "effective_tool": "shovel",
+      "creative": false
+    },
+    {
+      "id": 61,
+      "name": "Wild Farmland",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 0.6,
+      "drop": "Dirt",
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "farmland_dry",
+        "side": "dirt",
+        "bottom": "dirt"
+      },
+      "effective_tool": "shovel",
+      "creative": false
+    },
+    {
+      "id": 62,
+      "name": "Wheat Crop 0",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "wheat_0",
+        "side": "wheat_0",
+        "bottom": "wheat_0"
+      },
+      "creative": false
+    },
+    {
+      "id": 63,
+      "name": "Wheat Crop 1",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "wheat_1",
+        "side": "wheat_1",
+        "bottom": "wheat_1"
+      },
+      "creative": false
+    },
+    {
+      "id": 64,
+      "name": "Wheat Crop 2",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "wheat_2",
+        "side": "wheat_2",
+        "bottom": "wheat_2"
+      },
+      "creative": false
+    },
+    {
+      "id": 65,
+      "name": "Wheat Crop 3",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "wheat_3",
+        "side": "wheat_3",
+        "bottom": "wheat_3"
+      },
+      "creative": false
+    },
+    {
+      "id": 66,
+      "name": "Carrot Crop 0",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "carrot_0",
+        "side": "carrot_0",
+        "bottom": "carrot_0"
+      },
+      "creative": false
+    },
+    {
+      "id": 67,
+      "name": "Carrot Crop 1",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "carrot_1",
+        "side": "carrot_1",
+        "bottom": "carrot_1"
+      },
+      "creative": false
+    },
+    {
+      "id": 68,
+      "name": "Carrot Crop 2",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "carrot_2",
+        "side": "carrot_2",
+        "bottom": "carrot_2"
+      },
+      "creative": false
+    },
+    {
+      "id": 69,
+      "name": "Carrot Crop 3",
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "drop": "none",
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "carrot_3",
+        "side": "carrot_3",
+        "bottom": "carrot_3"
+      },
+      "creative": false
+    },
+    {
+      "id": 70,
+      "name": "Wheat Seeds",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_wheat_seeds",
+        "side": "item_wheat_seeds",
+        "bottom": "item_wheat_seeds"
+      }
+    },
+    {
+      "id": 71,
+      "name": "Wheat",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_wheat",
+        "side": "item_wheat",
+        "bottom": "item_wheat"
+      }
+    },
+    {
+      "id": 72,
+      "name": "Carrot",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_carrot",
+        "side": "item_carrot",
+        "bottom": "item_carrot"
+      },
+      "food": 3,
+      "saturation": 3.6
+    },
+    {
+      "id": 73,
+      "name": "Raw Beef",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_raw_beef",
+        "side": "item_raw_beef",
+        "bottom": "item_raw_beef"
+      },
+      "food": 3,
+      "saturation": 1.8
+    },
+    {
+      "id": 74,
+      "name": "Cooked Beef",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_cooked_beef",
+        "side": "item_cooked_beef",
+        "bottom": "item_cooked_beef"
+      },
+      "food": 8,
+      "saturation": 12.8
+    },
+    {
+      "id": 75,
+      "name": "Raw Horse Meat",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_raw_horse_meat",
+        "side": "item_raw_horse_meat",
+        "bottom": "item_raw_horse_meat"
+      },
+      "food": 3,
+      "saturation": 1.8
+    },
+    {
+      "id": 76,
+      "name": "Cooked Horse Meat",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_cooked_horse_meat",
+        "side": "item_cooked_horse_meat",
+        "bottom": "item_cooked_horse_meat"
+      },
+      "food": 8,
+      "saturation": 12.8
+    },
+    {
+      "id": 77,
+      "name": "Stick",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_stick",
+        "side": "item_stick",
+        "bottom": "item_stick"
+      }
+    },
+    {
+      "id": 78,
+      "name": "Iron Ingot",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_iron_ingot",
+        "side": "item_iron_ingot",
+        "bottom": "item_iron_ingot"
+      }
+    },
+    {
+      "id": 79,
+      "name": "Gold Ingot",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_gold_ingot",
+        "side": "item_gold_ingot",
+        "bottom": "item_gold_ingot"
+      }
+    },
+    {
+      "id": 80,
+      "name": "Diamond",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "item_diamond",
+        "side": "item_diamond",
+        "bottom": "item_diamond"
+      }
+    },
+    {
+      "id": 81,
+      "name": "Diamond Ore",
+      "solid": true,
+      "opaque": true,
+      "can_update": false,
+      "hardness": 3.0,
+      "drop": "Diamond",
+      "mesh_type": "Solid",
+      "mesh_style": "Block",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "diamond_ore",
+        "side": "diamond_ore",
+        "bottom": "diamond_ore"
+      },
+      "effective_tool": "pickaxe",
+      "harvest_tier": 3
+    },
+    {
+      "id": 82,
+      "name": "Wooden Pickaxe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_wooden_pickaxe",
+        "side": "tool_wooden_pickaxe",
+        "bottom": "tool_wooden_pickaxe"
+      },
+      "tool": "pickaxe",
+      "durability": 59,
+      "tool_tier": 1,
+      "tool_speed": 2.0,
+      "attack_damage": 2.0
+    },
+    {
+      "id": 83,
+      "name": "Wooden Axe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_wooden_axe",
+        "side": "tool_wooden_axe",
+        "bottom": "tool_wooden_axe"
+      },
+      "tool": "axe",
+      "durability": 59,
+      "tool_tier": 1,
+      "tool_speed": 2.0,
+      "attack_damage": 3.0
+    },
+    {
+      "id": 84,
+      "name": "Wooden Shovel",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_wooden_shovel",
+        "side": "tool_wooden_shovel",
+        "bottom": "tool_wooden_shovel"
+      },
+      "tool": "shovel",
+      "durability": 59,
+      "tool_tier": 1,
+      "tool_speed": 2.0,
+      "attack_damage": 1.5
+    },
+    {
+      "id": 85,
+      "name": "Wooden Sword",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_wooden_sword",
+        "side": "tool_wooden_sword",
+        "bottom": "tool_wooden_sword"
+      },
+      "tool": "sword",
+      "durability": 59,
+      "tool_tier": 1,
+      "tool_speed": 2.0,
+      "attack_damage": 4.0
+    },
+    {
+      "id": 86,
+      "name": "Wooden Hoe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_wooden_hoe",
+        "side": "tool_wooden_hoe",
+        "bottom": "tool_wooden_hoe"
+      },
+      "tool": "hoe",
+      "durability": 59,
+      "tool_tier": 1,
+      "tool_speed": 2.0,
+      "attack_damage": 1.0
+    },
+    {
+      "id": 87,
+      "name": "Stone Pickaxe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_stone_pickaxe",
+        "side": "tool_stone_pickaxe",
+        "bottom": "tool_stone_pickaxe"
+      },
+      "tool": "pickaxe",
+      "durability": 131,
+      "tool_tier": 2,
+      "tool_speed": 4.0,
+      "attack_damage": 3.0
+    },
+    {
+      "id": 88,
+      "name": "Stone Axe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_stone_axe",
+        "side": "tool_stone_axe",
+        "bottom": "tool_stone_axe"
+      },
+      "tool": "axe",
+      "durability": 131,
+      "tool_tier": 2,
+      "tool_speed": 4.0,
+      "attack_damage": 4.0
+    },
+    {
+      "id": 89,
+      "name": "Stone Shovel",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_stone_shovel",
+        "side": "tool_stone_shovel",
+        "bottom": "tool_stone_shovel"
+      },
+      "tool": "shovel",
+      "durability": 131,
+      "tool_tier": 2,
+      "tool_speed": 4.0,
+      "attack_damage": 2.0
+    },
+    {
+      "id": 90,
+      "name": "Stone Sword",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_stone_sword",
+        "side": "tool_stone_sword",
+        "bottom": "tool_stone_sword"
+      },
+      "tool": "sword",
+      "durability": 131,
+      "tool_tier": 2,
+      "tool_speed": 4.0,
+      "attack_damage": 5.0
+    },
+    {
+      "id": 91,
+      "name": "Stone Hoe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_stone_hoe",
+        "side": "tool_stone_hoe",
+        "bottom": "tool_stone_hoe"
+      },
+      "tool": "hoe",
+      "durability": 131,
+      "tool_tier": 2,
+      "tool_speed": 4.0,
+      "attack_damage": 1.0
+    },
+    {
+      "id": 92,
+      "name": "Iron Pickaxe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_iron_pickaxe",
+        "side": "tool_iron_pickaxe",
+        "bottom": "tool_iron_pickaxe"
+      },
+      "tool": "pickaxe",
+      "durability": 250,
+      "tool_tier": 3,
+      "tool_speed": 6.0,
+      "attack_damage": 4.0
+    },
+    {
+      "id": 93,
+      "name": "Iron Axe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_iron_axe",
+        "side": "tool_iron_axe",
+        "bottom": "tool_iron_axe"
+      },
+      "tool": "axe",
+      "durability": 250,
+      "tool_tier": 3,
+      "tool_speed": 6.0,
+      "attack_damage": 5.0
+    },
+    {
+      "id": 94,
+      "name": "Iron Shovel",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_iron_shovel",
+        "side": "tool_iron_shovel",
+        "bottom": "tool_iron_shovel"
+      },
+      "tool": "shovel",
+      "durability": 250,
+      "tool_tier": 3,
+      "tool_speed": 6.0,
+      "attack_damage": 2.5
+    },
+    {
+      "id": 95,
+      "name": "Iron Sword",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_iron_sword",
+        "side": "tool_iron_sword",
+        "bottom": "tool_iron_sword"
+      },
+      "tool": "sword",
+      "durability": 250,
+      "tool_tier": 3,
+      "tool_speed": 6.0,
+      "attack_damage": 6.0
+    },
+    {
+      "id": 96,
+      "name": "Iron Hoe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_iron_hoe",
+        "side": "tool_iron_hoe",
+        "bottom": "tool_iron_hoe"
+      },
+      "tool": "hoe",
+      "durability": 250,
+      "tool_tier": 3,
+      "tool_speed": 6.0,
+      "attack_damage": 1.0
+    },
+    {
+      "id": 97,
+      "name": "Diamond Pickaxe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_diamond_pickaxe",
+        "side": "tool_diamond_pickaxe",
+        "bottom": "tool_diamond_pickaxe"
+      },
+      "tool": "pickaxe",
+      "durability": 1561,
+      "tool_tier": 4,
+      "tool_speed": 8.0,
+      "attack_damage": 5.0
+    },
+    {
+      "id": 98,
+      "name": "Diamond Axe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_diamond_axe",
+        "side": "tool_diamond_axe",
+        "bottom": "tool_diamond_axe"
+      },
+      "tool": "axe",
+      "durability": 1561,
+      "tool_tier": 4,
+      "tool_speed": 8.0,
+      "attack_damage": 6.0
+    },
+    {
+      "id": 99,
+      "name": "Diamond Shovel",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_diamond_shovel",
+        "side": "tool_diamond_shovel",
+        "bottom": "tool_diamond_shovel"
+      },
+      "tool": "shovel",
+      "durability": 1561,
+      "tool_tier": 4,
+      "tool_speed": 8.0,
+      "attack_damage": 3.0
+    },
+    {
+      "id": 100,
+      "name": "Diamond Sword",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_diamond_sword",
+        "side": "tool_diamond_sword",
+        "bottom": "tool_diamond_sword"
+      },
+      "tool": "sword",
+      "durability": 1561,
+      "tool_tier": 4,
+      "tool_speed": 8.0,
+      "attack_damage": 7.0
+    },
+    {
+      "id": 101,
+      "name": "Diamond Hoe",
+      "item": true,
+      "solid": false,
+      "transparent": true,
+      "can_update": false,
+      "hardness": 0.0,
+      "mesh_type": "Flora",
+      "mesh_style": "XStyle",
+      "state": "Solid",
+      "texture": {
+        "atlas": "blocks_main",
+        "top": "tool_diamond_hoe",
+        "side": "tool_diamond_hoe",
+        "bottom": "tool_diamond_hoe"
+      },
+      "tool": "hoe",
+      "durability": 1561,
+      "tool_tier": 4,
+      "tool_speed": 8.0,
+      "attack_damage": 1.0
+    }
+  ]
+}

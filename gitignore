@@ -1,0 +1,56 @@
+# ---------- Сборка ----------
+build/
+cmake-build-*/
+out/
+bin/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+Makefile
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.pdb
+*.ilk
+/OptiCraft
+
+# ---------- Данные, создаваемые игрой при запуске ----------
+worlds/
+options.txt
+*.log
+
+# ---------- IDE и редакторы ----------
+.idea/
+.vscode/
+.vs/
+*.user
+*.suo
+*.swp
+*~
+
+# ---------- Мусор ОС ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Бэкапы и скриншоты ----------
+*.bak
+*.orig
+*.rej
+*.tmp
+*.ppm
+assets/texture/*~
+assets/texture/*_old.png
+assets/texture/*_before_*.png
+
+# ---------- Python-скрипты для генерации ассетов (в репозитории только C++ и готовые ассеты) ----------
+tools/*.py
+__pycache__/
+*.pyc
