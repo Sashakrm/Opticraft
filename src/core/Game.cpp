@@ -487,6 +487,7 @@ void Game::teardown_world() {
     m_cows.clear();
     m_crops_ptr.reset();
     m_ridden_horse = nullptr;
+    m_iso_capture_ptr.reset(); // до Chunk_Manager: снимок держит на него ссылку
     if (m_chunk_manager_ptr) {
         m_chunk_manager_ptr->clear(); // сохраняет изменённые чанки
         for (const glm::ivec3& position : m_chunk_manager_ptr->take_unloaded_chunk_positions()) {
@@ -1134,6 +1135,7 @@ void Game::update_horses(float delta_time) {
 }
 
 void Game::update_gameplay(float delta_time, bool simulation_active, bool player_actions) {
+    poll_iso_capture_result();
     m_chunk_manager_ptr->collect_finished_chunks();
     m_chunk_manager_ptr->collect_finished_mesh_jobs();
 
@@ -1520,6 +1522,83 @@ void Game::render_gameplay(bool show_gameplay_hud) {
     }
 }
 
+// ============================================================================
+//  Изометрический снимок мира (F7)
+// ============================================================================
+bool Game::start_iso_capture() {
+    if (!m_chunk_manager_ptr || !m_player_ptr || !m_renderer_ptr) return false;
+    if (m_iso_capture_ptr) {
+        // Предыдущий PNG ещё пишется в фоне — второй снимок параллельно не начинаем.
+        if (!m_iso_capture_ptr->is_finished()) {
+            push_chat_message(tr("iso.busy"), true);
+            return false;
+        }
+        poll_iso_capture_result();
+    }
+
+    int radius = Config::iso_capture_radius_chunks;
+    // Отладочный хук: OPTICRAFT_ISO_RADIUS=N — меньший радиус для быстрых проверок.
+    if (const char* override_radius = std::getenv("OPTICRAFT_ISO_RADIUS")) {
+        const int value = std::atoi(override_radius);
+        if (value > 0) radius = value;
+    }
+
+    m_iso_capture_ptr = std::make_unique<Isometric_Capture>(*m_chunk_manager_ptr, *m_renderer_ptr);
+    if (!m_iso_capture_ptr->start(m_player_ptr->get_position(), radius,
+                                  m_day_night_cycle.get_sky_color(),
+                                  m_day_night_cycle.get_ambient_intensity())) {
+        m_iso_capture_ptr.reset();
+        return false;
+    }
+    return true;
+}
+
+void Game::update_iso_capture() {
+    if (m_iso_capture_ptr) m_iso_capture_ptr->update();
+}
+
+void Game::cancel_iso_capture() {
+    if (m_iso_capture_ptr) m_iso_capture_ptr->cancel();
+}
+
+void Game::render_iso_capture_overlay() {
+    if (!m_iso_capture_ptr) {
+        clear_menu_frame();
+        return;
+    }
+    const Isometric_Capture& capture = *m_iso_capture_ptr;
+    std::string status;
+    switch (capture.get_stage()) {
+        case Isometric_Capture::Stage::Planning:   status = tr("iso.stage.planning"); break;
+        case Isometric_Capture::Stage::Generating:
+            status = tr("iso.stage.generating",
+                        {std::to_string(capture.get_chunks_loaded()), std::to_string(capture.get_chunks_total())});
+            break;
+        case Isometric_Capture::Stage::Lighting:   status = tr("iso.stage.lighting"); break;
+        case Isometric_Capture::Stage::Meshing:    status = tr("iso.stage.meshing"); break;
+        case Isometric_Capture::Stage::Rendering:
+            status = tr("iso.stage.rendering",
+                        {std::to_string(capture.get_tiles_done()), std::to_string(capture.get_tiles_total())});
+            break;
+        case Isometric_Capture::Stage::Saving:
+        case Isometric_Capture::Stage::Finished:   status = tr("iso.stage.saving"); break;
+    }
+    render_loading_screen(tr("iso.title"), status, capture.get_progress());
+}
+
+void Game::poll_iso_capture_result() {
+    if (!m_iso_capture_ptr || !m_iso_capture_ptr->is_finished()) return;
+    if (m_iso_capture_ptr->has_succeeded()) {
+        push_chat_message(tr("iso.saved", {m_iso_capture_ptr->get_output_path()}));
+    } else if (!m_iso_capture_ptr->was_cancelled()) {
+        const std::string& error = m_iso_capture_ptr->get_error();
+        push_chat_message(tr("iso.failed", {error.empty() ? m_iso_capture_ptr->get_output_path() : error}), true);
+    }
+    m_iso_capture_ptr.reset();
+    // Отладочный хук (см. State_Playing::update): после автотеста снимка выходим из игры.
+    if (std::getenv("OPTICRAFT_ISO_AUTOTEST")) request_exit();
+}
+
 void Game::log_stats() {
     std::cout << "\n=== Stats ===\n";
     std::cout << "Chunks loaded: " << m_chunk_manager_ptr->get_loaded_count() << "\n";
@@ -1546,6 +1625,7 @@ void Game::shutdown() {
     // Свиньи держат GL-ресурсы (VAO/VBO) — обязаны быть уничтожены ДО
     // m_window_ptr.reset()/glfwTerminate() ниже, иначе деструктор Mob_Model
     // упадёт на мёртвом GL-контексте (см. предупреждение в Mob_Model.h).
+    m_iso_capture_ptr.reset();
     m_pigs.clear();
     m_horses.clear();
     m_cows.clear();
@@ -1561,6 +1641,7 @@ void Game::shutdown() {
     m_chunk_manager_ptr.reset();
     m_renderer_ptr.reset();
     m_world_generator.reset();
+    Atlas_Registry::get_instance().clear();
     m_player_ptr.reset();
     m_camera_ptr.reset();
     m_input_ptr.reset();

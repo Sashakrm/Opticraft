@@ -16,7 +16,8 @@ enum class Game_State_Id {
     Create_World,
     Loading,
     Playing,
-    Settings_Menu
+    Settings_Menu,
+    Iso_Capture
 };
 
 class Application;

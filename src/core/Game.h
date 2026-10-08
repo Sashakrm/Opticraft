@@ -12,6 +12,7 @@
 #include "input/Input_Manager.h"
 #include "entities/Camera.h"
 #include "rendering/Renderer.h"
+#include "rendering/Isometric_Capture.h"
 #include "world/Chunk_Manager.h"
 #include "world/Block_Interaction.h"
 #include "world/Container_Session.h"
@@ -41,6 +42,9 @@ private:
     std::unique_ptr<Chunk_Manager> m_chunk_manager_ptr;
     std::unique_ptr<Player> m_player_ptr;
     std::unique_ptr<Inventory> m_inventory_ptr;
+    // Изометрический снимок мира (F7). Объявлен ПОСЛЕ Chunk_Manager и Renderer, поэтому
+    // уничтожается раньше них (держит ссылки на оба и, пока пишется PNG, фоновый поток).
+    std::unique_ptr<Isometric_Capture> m_iso_capture_ptr;
     // Свиньи в мире — держится после m_window_ptr по объявлению, поэтому
     // уничтожается ДО разрушения GL-контекста (см. предупреждение о времени
     // жизни в src/mobs/Mob_Model.h — иначе деструктор Mob упадёт на мёртвом контексте).
@@ -110,6 +114,8 @@ private:
     float m_delta_time;
     float m_last_frame_time;
 
+    // Когда фоновая запись PNG закончилась — сообщает в чат и освобождает снимок.
+    void poll_iso_capture_result();
     void log_stats();
     void reload_world(const std::string& generation_folder);
     // Находится ли ТОЧКА ГЛАЗ игрока внутри жидкости. Проверяется именно камера,
@@ -242,6 +248,15 @@ public:
     void set_gui_scale_setting(int value);
     void cycle_language();   // следующий язык из assets/lang, сохраняется в options.txt
     void save_settings() const { save_options(); }
+
+    // --- Изометрический снимок мира (клавиша F7) ----------------------------------------------
+    // start — начинает снимок (false, если мира нет или предыдущий снимок ещё пишется);
+    // update — шаг на кадр; is_iso_capture_busy — пока идёт загрузка/рендер (мир на паузе).
+    bool start_iso_capture();
+    void update_iso_capture();
+    void cancel_iso_capture();
+    bool is_iso_capture_busy() const { return m_iso_capture_ptr && m_iso_capture_ptr->is_busy(); }
+    void render_iso_capture_overlay();
 
     void request_exit();
     void set_gameplay_input_active(bool active);

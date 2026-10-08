@@ -48,6 +48,10 @@ public:
 
     // nullptr, если атлас с таким именем не зарегистрирован (см. лог на LOG_ERROR).
     const Texture_Atlas* get_atlas(const std::string& name) const;
+
+    // Освобождает GL-текстуры атласов. Звать до glfwTerminate(): иначе деструктор синглтона
+    // удаляет текстуры уже после уничтожения GL-контекста (падение при выходе).
+    void clear() { m_atlases.clear(); }
 };
 
 #endif //OPTICRAFT_ATLAS_REGISTRY_H

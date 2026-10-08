@@ -210,7 +210,8 @@ Chunk_Meshes build_chunk_mesh(const Chunk_Block_Grid& blocks,
                               int chunk_x, int chunk_y, int chunk_z,
                               const Chunk_Neighbor_Lookup& neighbor_lookup,
                               const Chunk_Light_Lookup& light_lookup,
-                              const Texture_Atlas& atlas);
+                              const Texture_Atlas& atlas,
+                              bool only_positive_faces = false);
 
 class Chunk {
 private:

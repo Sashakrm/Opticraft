@@ -36,6 +36,17 @@
 
   "loading.title": "Loading world",
 
+  "iso.title": "Creating isometric view",
+  "iso.stage.planning": "Planning the area...",
+  "iso.stage.generating": "Generating terrain: {0} / {1} chunks",
+  "iso.stage.lighting": "Calculating light...",
+  "iso.stage.meshing": "Building meshes...",
+  "iso.stage.rendering": "Rendering: tile {0} / {1}",
+  "iso.stage.saving": "Saving image...",
+  "iso.saved": "Isometric view saved: {0}",
+  "iso.failed": "Isometric view failed: {0}",
+  "iso.busy": "The previous isometric view is still being saved",
+
   "options.title": "Options",
   "options.render_distance": "Render Dist",
   "options.flora_distance": "Flora Dist",

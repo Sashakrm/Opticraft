@@ -13,11 +13,24 @@
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
+#include <chrono>
 
 namespace {
     constexpr size_t max_finished_chunks_per_frame = 4;
     constexpr size_t max_finished_meshes_per_frame = 4;
     constexpr size_t max_mesh_jobs_enqueued_per_frame = 16;
+    // Режим захвата области: мир стоит на паузе, поэтому за кадр можно принять на порядок больше.
+    constexpr size_t capture_max_finished_chunks_per_frame = 256;
+    constexpr size_t capture_max_finished_meshes_per_frame = 128;
+    constexpr size_t capture_max_mesh_jobs_enqueued_per_frame = 256;
+    constexpr size_t capture_sky_columns_per_frame = 48;
+    constexpr double capture_plan_budget_ms = 8.0;
+
+    int floor_div_chunk(int value, int divisor) {
+        int q = value / divisor;
+        if ((value % divisor != 0) && ((value < 0) != (divisor < 0))) --q;
+        return q;
+    }
 
     // --- Освещение: общие быстрые примитивы для recompute_lighting и recompute_sky_lighting ---
     //
@@ -392,6 +405,17 @@ void Chunk_Manager::worker_loop(bool mesh_dedicated) {
                     return face.get(nlx, nly);
                 }
 
+                // Область захвата: за её горизонтальными границами мира «нет» — воздух, а не
+                // продолжение рельефа от генератора (иначе у края кадра не будет боковых граней).
+                if (snapshot.clip.active) {
+                    const int ncx = floor_div_chunk(wx, Config::chunk_size);
+                    const int ncz = floor_div_chunk(wz, Config::chunk_size);
+                    if (ncx < snapshot.clip.min_cx || ncx > snapshot.clip.max_cx ||
+                        ncz < snapshot.clip.min_cz || ncz > snapshot.clip.max_cz) {
+                        return Block_Types::Air;
+                    }
+                }
+
                 return generator ? generator->get_block(wx, wy, wz) : Block_Types::Air;
             };
 
@@ -420,12 +444,24 @@ void Chunk_Manager::worker_loop(bool mesh_dedicated) {
                     return face.get(nlx, nly);
                 }
 
+                // За границей области захвата — открытое небо (небесный свет 15 в старшем
+                // ниббле), чтобы боковые грани среза не были чёрными.
+                if (snapshot.clip.active) {
+                    const int ncx = floor_div_chunk(wx, Config::chunk_size);
+                    const int ncz = floor_div_chunk(wz, Config::chunk_size);
+                    if (ncx < snapshot.clip.min_cx || ncx > snapshot.clip.max_cx ||
+                        ncz < snapshot.clip.min_cz || ncz > snapshot.clip.max_cz) {
+                        return 0xF0;
+                    }
+                }
+
                 return 0;
             };
 
             Chunk_Meshes meshes = build_chunk_mesh(mesh_job.own_blocks, mesh_job.own_light,
                                                     mesh_job.position.x, mesh_job.position.y, mesh_job.position.z,
-                                                    lookup, light_lookup, *m_texture_atlas);
+                                                    lookup, light_lookup, *m_texture_atlas,
+                                                    mesh_job.clip.active);
 
             std::lock_guard<std::mutex> lock(m_completed_mutex);
             m_completed_mesh_jobs.push({mesh_job.position, mesh_job.generation_id, std::move(meshes)});
@@ -510,13 +546,22 @@ void Chunk_Manager::enqueue_mesh_rebuild(int cx, int cy, int cz) {
     job.own_blocks = target->get_blocks();
     job.own_light = target->get_light_grid();
     job.generation_id = m_generation_id;
+    job.clip = current_capture_clip();
 
     // Порядок ровно как в комментарии к Mesh_Job: -X, +X, -Y, +Y, -Z, +Z.
     static constexpr glm::ivec3 offsets[6] = {
         {-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}
     };
+    const Capture_Clip clip = job.clip;
     for (int i = 0; i < 6; ++i) {
         const glm::ivec3 npos = position + offsets[i];
+        // Область захвата: чанки за её границей могут быть загружены (обычная дальность
+        // прорисовки), но для снимка их «нет» — иначе вместо боковой грани среза был бы
+        // реальный соседний рельеф.
+        if (clip.active && (npos.x < clip.min_cx || npos.x > clip.max_cx ||
+                            npos.z < clip.min_cz || npos.z > clip.max_cz)) {
+            continue;
+        }
         if (const Chunk* neighbor = get_chunk(npos.x, npos.y, npos.z)) {
             Chunk_Block_Face block_face;
             Chunk_Light_Face light_face;
@@ -569,6 +614,10 @@ void Chunk_Manager::enqueue_mesh_rebuild(int cx, int cy, int cz) {
 }
 
 bool Chunk_Manager::is_chunk_wanted(const glm::ivec3& position) const {
+    // Во время захвата нужны только чанки плана, обычное окно вокруг игрока не действует.
+    if (capture_active()) {
+        return capture_plan_contains(position);
+    }
     if (m_player_chunk.x == std::numeric_limits<int>::min()) {
         return true;
     }
@@ -636,6 +685,9 @@ void Chunk_Manager::unload_distant(int center_cx, int center_cz, int max_distanc
 }
 
 void Chunk_Manager::update_player_position(float player_x, float player_y, float player_z) {
+    // Пока идёт захват области, загрузкой управляет pump_capture_region().
+    if (capture_active()) return;
+
     collect_finished_chunks();
     collect_finished_mesh_jobs();
 
@@ -667,8 +719,10 @@ void Chunk_Manager::collect_finished_chunks() {
 
     bool any_chunk_inserted = false;
 
+    const size_t chunk_cap = capture_active() ? capture_max_finished_chunks_per_frame
+                                              : max_finished_chunks_per_frame;
     size_t processed_chunks = 0;
-    while (!completed.empty() && processed_chunks < max_finished_chunks_per_frame) {
+    while (!completed.empty() && processed_chunks < chunk_cap) {
         Chunk_Result result = std::move(completed.front());
         completed.pop();
         ++processed_chunks;
@@ -731,6 +785,10 @@ void Chunk_Manager::collect_finished_chunks() {
     // startup the vertical stack can contain thousands of chunks; rebuilding after each
     // insertion turns loading into a quadratic amount of work and makes the window appear
     // frozen. Wait until the current load wave has drained, then build it once.
+    // Захват области делает свет отдельной фазой (pump_capture_region): после загрузки ВСЕХ
+    // чанков, один раз, а не на каждой волне.
+    if (capture_active()) return;
+
     if (!m_columns_pending_sky_recompute.empty()) {
         ++m_frames_since_sky_recompute;
     }
@@ -772,8 +830,10 @@ void Chunk_Manager::collect_finished_mesh_jobs() {
         std::swap(completed, m_completed_mesh_jobs);
     }
 
+    const size_t mesh_cap = capture_active() ? capture_max_finished_meshes_per_frame
+                                             : max_finished_meshes_per_frame;
     size_t processed_meshes = 0;
-    while (!completed.empty() && processed_meshes < max_finished_meshes_per_frame) {
+    while (!completed.empty() && processed_meshes < mesh_cap) {
         Mesh_Result result = std::move(completed.front());
         completed.pop();
         ++processed_meshes;
@@ -816,6 +876,8 @@ void Chunk_Manager::collect_finished_mesh_jobs() {
 }
 
 void Chunk_Manager::rebuild_dirty_chunks() {
+    const size_t enqueue_cap = capture_active() ? capture_max_mesh_jobs_enqueued_per_frame
+                                                : max_mesh_jobs_enqueued_per_frame;
     size_t enqueued = 0;
     m_chunks.for_each_until([&](const glm::ivec3& key, std::unique_ptr<Chunk>& chunk) {
         // Пересборка асинхронная (см. enqueue_mesh_rebuild) — старый меш чанка остаётся
@@ -825,7 +887,7 @@ void Chunk_Manager::rebuild_dirty_chunks() {
         // звать его безусловно на каждый dirty-чанк каждый кадр без риска заспамить очередь.
         if (chunk->is_mesh_dirty()) {
             enqueue_mesh_rebuild(key.x, key.y, key.z);
-            if (++enqueued >= max_mesh_jobs_enqueued_per_frame) {
+            if (++enqueued >= enqueue_cap) {
                 return false; // хватит на этот кадр
             }
         }
@@ -1385,6 +1447,9 @@ std::vector<Renderable_Chunk> Chunk_Manager::get_renderable_chunks(
 
     m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
         if (chunk->is_empty()) return;
+        // Захват области рисует только чанки плана (обычные чанки вокруг игрока, лежащие
+        // вне плана, — глубокое подземелье/небо — в кадр не попадают).
+        if (capture_active() && !capture_plan_contains(key)) return;
 
         const Chunk_Meshes& meshes = chunk->get_meshes();
         Renderable_Chunk renderable{key, &meshes, chunk->get_mesh_version()};
@@ -1427,6 +1492,338 @@ std::vector<Renderable_Chunk> Chunk_Manager::get_renderable_chunks(
     });
 
     return result;
+}
+
+// ============================================================================
+//  Захват области (изометрический снимок)
+// ============================================================================
+bool Chunk_Manager::capture_plan_contains(const glm::ivec3& position) const {
+    if (m_capture.top_cy.empty()) return false;
+    const int dx = position.x - (m_capture.center_cx - m_capture.radius);
+    const int dz = position.z - (m_capture.center_cz - m_capture.radius);
+    if (dx < 0 || dz < 0 || dx >= m_capture.side || dz >= m_capture.side) return false;
+    const size_t index = static_cast<size_t>(dz) * static_cast<size_t>(m_capture.side) + static_cast<size_t>(dx);
+    return position.y >= m_capture.bottom_cy[index] && position.y <= m_capture.top_cy[index];
+}
+
+Chunk_Manager::Capture_Clip Chunk_Manager::current_capture_clip() const {
+    Capture_Clip clip;
+    if (capture_active()) {
+        clip.active = true;
+        clip.min_cx = m_capture.center_cx - m_capture.radius;
+        clip.max_cx = m_capture.center_cx + m_capture.radius;
+        clip.min_cz = m_capture.center_cz - m_capture.radius;
+        clip.max_cz = m_capture.center_cz + m_capture.radius;
+    }
+    return clip;
+}
+
+void Chunk_Manager::begin_capture_region(int center_cx, int center_cz, int radius,
+                                         int extra_depth_layers, int top_margin_blocks) {
+    if (!m_world_generator) {
+        LOG_ERROR("Chunk_Manager::begin_capture_region: World_Generator is not set");
+        return;
+    }
+    m_capture = Capture_Region{};
+    m_capture.phase = static_cast<int>(Capture_Phase::Planning);
+    m_capture.center_cx = center_cx;
+    m_capture.center_cz = center_cz;
+    m_capture.radius = radius;
+    m_capture.extra_depth = std::max(0, extra_depth_layers);
+    m_capture.top_margin = std::max(0, top_margin_blocks);
+    m_capture.side = 2 * radius + 1;
+    m_capture.apron_side = m_capture.side + 2;
+    const size_t apron_cells = static_cast<size_t>(m_capture.apron_side) * static_cast<size_t>(m_capture.apron_side);
+    m_capture.col_min_h.assign(apron_cells, 0);
+    m_capture.col_max_h.assign(apron_cells, 0);
+    m_capture.planned_columns = 0;
+    LOG_INFO("Capture region: planning " + std::to_string(m_capture.side) + "x" +
+             std::to_string(m_capture.side) + " chunk columns");
+}
+
+void Chunk_Manager::capture_finish_planning() {
+    const int side = m_capture.side;
+    const int apron = m_capture.apron_side;
+    const int min_cy = Config::world_min_chunk_y;
+    const int max_cy = Config::world_max_chunk_y;
+    constexpr int sea_level = World_Generator::sea_level();
+
+    m_capture.bottom_cy.assign(static_cast<size_t>(side) * side, 0);
+    m_capture.top_cy.assign(static_cast<size_t>(side) * side, 0);
+    m_capture.chunks_total = 0;
+
+    // Общий плоский низ среза (как «кусок земли» в Indev): самая низкая точка рельефа области.
+    int global_lowest = std::numeric_limits<int>::max();
+    for (int v : m_capture.col_min_h) global_lowest = std::min(global_lowest, v);
+    const int flat_bottom = floor_div_chunk(global_lowest, Config::chunk_height) - m_capture.extra_depth;
+
+    for (int z = 0; z < side; ++z) {
+        for (int x = 0; x < side; ++x) {
+            // Колонка (x,z) области лежит в (x+1, z+1) таблицы с кольцом.
+            int lowest = std::numeric_limits<int>::max();
+            for (int dz = -1; dz <= 1; ++dz) {
+                for (int dx = -1; dx <= 1; ++dx) {
+                    const size_t a = static_cast<size_t>(z + 1 + dz) * apron + static_cast<size_t>(x + 1 + dx);
+                    lowest = std::min(lowest, m_capture.col_min_h[a]);
+                }
+            }
+            const size_t own = static_cast<size_t>(z + 1) * apron + static_cast<size_t>(x + 1);
+            const int highest = std::max(m_capture.col_max_h[own], sea_level);
+
+            // Верх — рельеф (или вода) плюс запас на деревья; низ — самая низкая точка этой
+            // колонки и её соседей (иначе у обрыва у соседа были бы видны «дыры») плюс
+            // дополнительные слои для толщины среза.
+            int top = floor_div_chunk(highest + m_capture.top_margin, Config::chunk_height);
+            int bottom = flat_bottom; (void)lowest;
+            top = std::clamp(top, min_cy, max_cy);
+            bottom = std::clamp(bottom, min_cy, top);
+
+            const size_t index = static_cast<size_t>(z) * side + static_cast<size_t>(x);
+            m_capture.bottom_cy[index] = bottom;
+            m_capture.top_cy[index] = top;
+            m_capture.chunks_total += static_cast<size_t>(top - bottom + 1);
+        }
+    }
+
+    if (std::getenv("OPTICRAFT_ISO_DEBUG")) {
+        for (int z = 0; z < side; ++z) {
+            std::string row;
+            for (int x = 0; x < side; ++x) {
+                const size_t index = static_cast<size_t>(z) * side + static_cast<size_t>(x);
+                row += "[" + std::to_string(m_capture.bottom_cy[index]) + ".." + std::to_string(m_capture.top_cy[index]) + "] ";
+            }
+            LOG_INFO("plan z=" + std::to_string(z) + ": " + row);
+        }
+    }
+
+    // Ставим в очередь все чанки плана. Уже загруженные enqueue_chunk_load пропускает сам.
+    const int origin_cx = m_capture.center_cx - m_capture.radius;
+    const int origin_cz = m_capture.center_cz - m_capture.radius;
+    for (int z = 0; z < side; ++z) {
+        for (int x = 0; x < side; ++x) {
+            const size_t index = static_cast<size_t>(z) * side + static_cast<size_t>(x);
+            const bool on_edge = x == 0 || z == 0 || x == side - 1 || z == side - 1;
+            for (int cy = m_capture.bottom_cy[index]; cy <= m_capture.top_cy[index]; ++cy) {
+                const int cx = origin_cx + x;
+                const int cz = origin_cz + z;
+                if (is_chunk_loaded(cx, cy, cz)) {
+                    // Меш такого чанка был построен без учёта границы кадра — пересобрать.
+                    if (on_edge) {
+                        if (Chunk* existing = get_chunk(cx, cy, cz)) existing->mark_mesh_dirty();
+                    }
+                } else {
+                    enqueue_chunk_load(cx, cy, cz);
+                }
+            }
+        }
+    }
+
+    m_capture.phase = static_cast<int>(Capture_Phase::Generating);
+    LOG_INFO("Capture region: " + std::to_string(m_capture.chunks_total) + " chunks planned");
+}
+
+void Chunk_Manager::pump_capture_region() {
+    if (!capture_active()) return;
+    const Capture_Phase phase = static_cast<Capture_Phase>(m_capture.phase);
+
+    if (phase == Capture_Phase::Planning) {
+        // Высоты считаем частями по бюджету времени, чтобы окно не зависало: на колонку
+        // приходится 25 запросов к генератору.
+        const int apron = m_capture.apron_side;
+        const size_t total = static_cast<size_t>(apron) * static_cast<size_t>(apron);
+        const auto start = std::chrono::steady_clock::now();
+        static constexpr int probes[5] = {0, 8, 16, 24, Config::chunk_size - 1};
+
+        while (m_capture.planned_columns < total) {
+            const size_t index = m_capture.planned_columns;
+            const int ax = static_cast<int>(index % static_cast<size_t>(apron));
+            const int az = static_cast<int>(index / static_cast<size_t>(apron));
+            // Индекс таблицы с кольцом -> чанковая колонка: ax=0 это колонка origin-1.
+            const int cx = m_capture.center_cx - m_capture.radius - 1 + ax;
+            const int cz = m_capture.center_cz - m_capture.radius - 1 + az;
+
+            int lo = std::numeric_limits<int>::max();
+            int hi = std::numeric_limits<int>::min();
+            for (const int pz : probes) {
+                for (const int px : probes) {
+                    const int h = m_world_generator->get_height(cx * Config::chunk_size + px,
+                                                                cz * Config::chunk_size + pz);
+                    lo = std::min(lo, h);
+                    hi = std::max(hi, h);
+                }
+            }
+            m_capture.col_min_h[index] = lo;
+            m_capture.col_max_h[index] = hi;
+            ++m_capture.planned_columns;
+
+            const double elapsed_ms = std::chrono::duration<double, std::milli>(
+                std::chrono::steady_clock::now() - start).count();
+            if (elapsed_ms > capture_plan_budget_ms) break;
+        }
+        if (m_capture.planned_columns >= total) capture_finish_planning();
+        return;
+    }
+
+    if (phase == Capture_Phase::Generating) {
+        collect_finished_chunks();
+        size_t loaded = 0;
+        const int side = m_capture.side;
+        const int origin_cx = m_capture.center_cx - m_capture.radius;
+        const int origin_cz = m_capture.center_cz - m_capture.radius;
+        for (int z = 0; z < side; ++z) {
+            for (int x = 0; x < side; ++x) {
+                const size_t index = static_cast<size_t>(z) * side + static_cast<size_t>(x);
+                for (int cy = m_capture.bottom_cy[index]; cy <= m_capture.top_cy[index]; ++cy) {
+                    if (is_chunk_loaded(origin_cx + x, cy, origin_cz + z)) ++loaded;
+                }
+            }
+        }
+        if (loaded >= m_capture.chunks_total) {
+            m_capture.lighting_columns_total = m_columns_pending_sky_recompute.size();
+            m_capture.phase = static_cast<int>(Capture_Phase::Lighting);
+        }
+        return;
+    }
+
+    if (phase == Capture_Phase::Lighting) {
+        // Небесный свет — пачками по колонкам; каждая пачка помечает затронутые меши грязными.
+        std::unordered_set<uint64_t> batch;
+        for (auto it = m_columns_pending_sky_recompute.begin();
+             it != m_columns_pending_sky_recompute.end() && batch.size() < capture_sky_columns_per_frame;) {
+            batch.insert(*it);
+            it = m_columns_pending_sky_recompute.erase(it);
+        }
+        recompute_sky_lighting(batch, false);
+
+        if (m_columns_pending_sky_recompute.empty()) {
+            if (!m_light_sources.empty()) recompute_lighting();
+            // Меши строятся один раз, после того как весь свет посчитан.
+            size_t dirty = 0;
+            m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
+                if (chunk->is_mesh_dirty() && capture_plan_contains(key)) ++dirty;
+            });
+            m_capture.dirty_at_meshing_start = std::max<size_t>(dirty, 1);
+            m_capture.phase = static_cast<int>(Capture_Phase::Meshing);
+        }
+        return;
+    }
+
+    if (phase == Capture_Phase::Meshing) {
+        collect_finished_mesh_jobs();
+        rebuild_dirty_chunks();
+
+        size_t dirty = 0;
+        m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
+            if (chunk->is_mesh_dirty() && capture_plan_contains(key)) ++dirty;
+        });
+        if (dirty == 0 && m_pending_mesh_rebuilds.empty() && m_mesh_rebuild_requeue.empty()) {
+            if (!m_capture.remesh_pass_done) {
+                // Второй проход: все меши плана пересобираются уже с окончательным светом
+                // (ранние пересборки соседей могли застать неподсчитанный свет).
+                m_capture.remesh_pass_done = true;
+                m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
+                    if (capture_plan_contains(key)) chunk->mark_mesh_dirty();
+                });
+                m_capture.dirty_at_meshing_start = std::max<size_t>(m_capture.chunks_total, 1);
+                return;
+            }
+            m_capture.phase = static_cast<int>(Capture_Phase::Ready);
+            LOG_INFO("Capture region: ready");
+        }
+        return;
+    }
+}
+
+Chunk_Manager::Capture_Status Chunk_Manager::get_capture_status() const {
+    Capture_Status status;
+    status.phase = static_cast<Capture_Phase>(m_capture.phase);
+    status.chunks_total = m_capture.chunks_total;
+    if (!capture_active()) return status;
+
+    switch (status.phase) {
+        case Capture_Phase::Planning: {
+            const double total = static_cast<double>(m_capture.apron_side) * m_capture.apron_side;
+            status.progress = 0.05f * static_cast<float>(static_cast<double>(m_capture.planned_columns) / total);
+            break;
+        }
+        case Capture_Phase::Generating: {
+            // Считаем загруженные чанки плана (дёшево: по колонкам области).
+            size_t loaded = 0;
+            const int side = m_capture.side;
+            const int origin_cx = m_capture.center_cx - m_capture.radius;
+            const int origin_cz = m_capture.center_cz - m_capture.radius;
+            for (int z = 0; z < side; ++z) {
+                for (int x = 0; x < side; ++x) {
+                    const size_t index = static_cast<size_t>(z) * side + static_cast<size_t>(x);
+                    for (int cy = m_capture.bottom_cy[index]; cy <= m_capture.top_cy[index]; ++cy) {
+                        if (is_chunk_loaded(origin_cx + x, cy, origin_cz + z)) ++loaded;
+                    }
+                }
+            }
+            status.chunks_loaded = loaded;
+            const float fraction = m_capture.chunks_total
+                ? static_cast<float>(loaded) / static_cast<float>(m_capture.chunks_total) : 1.0f;
+            status.progress = 0.05f + 0.60f * fraction;
+            break;
+        }
+        case Capture_Phase::Lighting: {
+            const float total = static_cast<float>(std::max<size_t>(m_capture.lighting_columns_total, 1));
+            const float left = static_cast<float>(m_columns_pending_sky_recompute.size());
+            status.chunks_loaded = m_capture.chunks_total;
+            status.progress = 0.65f + 0.05f * std::clamp(1.0f - left / total, 0.0f, 1.0f);
+            break;
+        }
+        case Capture_Phase::Meshing: {
+            size_t dirty = 0;
+            m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
+                if (chunk->is_mesh_dirty() && capture_plan_contains(key)) ++dirty;
+            });
+            status.chunks_loaded = m_capture.chunks_total;
+            const float fraction = 1.0f - static_cast<float>(dirty) /
+                                          static_cast<float>(m_capture.dirty_at_meshing_start);
+            status.progress = 0.70f + 0.30f * std::clamp(fraction, 0.0f, 1.0f);
+            break;
+        }
+        case Capture_Phase::Ready:
+            status.chunks_loaded = m_capture.chunks_total;
+            status.progress = 1.0f;
+            break;
+        case Capture_Phase::Inactive:
+            break;
+    }
+    return status;
+}
+
+void Chunk_Manager::end_capture_region() {
+    if (!capture_active()) return;
+
+    const Capture_Clip clip = current_capture_clip();
+    m_capture = Capture_Region{};
+
+    // Не начатые задачи генерации области больше не нужны; уже идущие дойдут и будут
+    // отброшены is_chunk_wanted, если лежат вне обычного окна вокруг игрока.
+    {
+        std::lock_guard<std::mutex> lock(m_job_mutex);
+        std::priority_queue<Chunk_Job, std::vector<Chunk_Job>, Chunk_Job_Priority> empty;
+        std::swap(m_pending_jobs, empty);
+    }
+    m_requested_chunks.clear();
+
+    // Чанки на границе области остались с «обрезанными воздухом» боковыми гранями — пересобрать,
+    // если они переживут возврат к обычному окну.
+    if (clip.active) {
+        m_chunks.for_each([&](const glm::ivec3& key, const std::unique_ptr<Chunk>& chunk) {
+            if (key.x == clip.min_cx || key.x == clip.max_cx ||
+                key.z == clip.min_cz || key.z == clip.max_cz) {
+                chunk->mark_mesh_dirty();
+            }
+        });
+    }
+
+    // Следующий update_player_position пересчитает и загрузку, и выгрузку под обычное окно:
+    // всё, что лежит вне него (срез мира), освободится.
+    m_player_chunk = {std::numeric_limits<int>::min(), std::numeric_limits<int>::min()};
+    LOG_INFO("Capture region: closed");
 }
 
 std::vector<glm::ivec3> Chunk_Manager::take_unloaded_chunk_positions() {

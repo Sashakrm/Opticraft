@@ -74,6 +74,15 @@ private:
         std::unique_ptr<Chunk> chunk;
     };
 
+    // Границы области захвата (см. begin_capture_region), прикладываются к задаче меша в момент
+    // постановки. За пределами области соседние чанки НЕ существуют, а не «неизвестны»: воркер
+    // трактует их как воздух, поэтому у границы кадра строятся боковые грани и срез мира
+    // получается закрытым, а не пустым внутри.
+    struct Capture_Clip {
+        bool active = false;
+        int min_cx = 0, max_cx = 0, min_cz = 0, max_cz = 0;
+    };
+
     // Задача на асинхронную пересборку меша УЖЕ загруженного, разделяемого чанка (правка
     // блока игроком, или новый сосед подгрузился и старые грани на границе устарели).
     // В отличие от Chunk_Job (генерация нового чанка), тут не передаётся живой Chunk —
@@ -92,6 +101,7 @@ private:
         Chunk_Block_Faces neighbor_blocks;
         Chunk_Light_Faces neighbor_light;
         uint64_t generation_id;
+        Capture_Clip clip;
     };
 
     struct Mesh_Job_Priority {
@@ -180,6 +190,28 @@ private:
     // того длинную функцию.
     void sync_block_entity(int wx, int wy, int wz, Block_Types old_type, Block_Types new_type);
     std::filesystem::path get_block_entities_path() const;
+
+    // --- Режим захвата области --------------------------------------------------------------
+    // Состояние, пока идёт изометрический снимок (см. публичный блок ниже).
+    struct Capture_Region {
+        int phase = 0; // Capture_Phase, объявлен ниже в public
+        int center_cx = 0, center_cz = 0, radius = 0;
+        int extra_depth = 1, top_margin = 32;
+        int side = 0;           // 2*radius+1 — колонок в области
+        int apron_side = 0;     // side+2 — область плюс кольцо в 1 колонку (для соседей при расчёте дна)
+        size_t planned_columns = 0;
+        std::vector<int> col_min_h, col_max_h;   // по колонкам с кольцом, apron_side^2
+        std::vector<int> bottom_cy, top_cy;      // по колонкам области, side^2
+        size_t chunks_total = 0;
+        bool remesh_pass_done = false;
+        size_t dirty_at_meshing_start = 0;
+        size_t lighting_columns_total = 0;
+    };
+    Capture_Region m_capture;
+    bool capture_active() const { return m_capture.phase != 0; }
+    bool capture_plan_contains(const glm::ivec3& position) const;
+    Capture_Clip current_capture_clip() const;
+    void capture_finish_planning();
 
     void unload_chunk(int cx, int cy, int cz);
     void enqueue_chunk_load(int cx, int cy, int cz);
@@ -277,6 +309,27 @@ public:
     // Тик блоков с внутренним состоянием — сейчас это печи: горение топлива, прожарка,
     // выдача результата. Печь в незагруженном чанке не тикает (как в Minecraft).
     void update_block_entities(float delta_time);
+
+    // --- Захват области (изометрический снимок мира) -----------------------------------------
+    // Грузит и строит меши для квадрата (2R+1)x(2R+1) чанков вокруг (center_cx, center_cz) —
+    // намного дальше обычной дальности прорисовки. Чтобы это поместилось в память, по вертикали
+    // для каждой колонки берётся только нужный диапазон слоёв (от самой низкой точки рельефа
+    // вокруг до верха рельефа плюс запас на деревья), а не всё окно +-8 чанков.
+    // Обычная загрузка/выгрузка вокруг игрока на это время отключена; end_capture_region()
+    // возвращает всё как было.
+    enum class Capture_Phase { Inactive = 0, Planning, Generating, Lighting, Meshing, Ready };
+    struct Capture_Status {
+        Capture_Phase phase = Capture_Phase::Inactive;
+        float progress = 0.0f;     // 0..1 по всем фазам
+        size_t chunks_total = 0;
+        size_t chunks_loaded = 0;
+    };
+    void begin_capture_region(int center_cx, int center_cz, int radius,
+                              int extra_depth_layers, int top_margin_blocks);
+    // Один шаг подготовки области; звать каждый кадр, пока фаза не станет Ready.
+    void pump_capture_region();
+    Capture_Status get_capture_status() const;
+    void end_capture_region();
 
     size_t get_loaded_count() const { return m_chunks.size(); }
 };

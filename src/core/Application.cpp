@@ -432,6 +432,11 @@ namespace {
             }
 
             if (!m_is_paused) {
+                // F7 — изометрический снимок мира (как в Minecraft Indev).
+                if (game.is_key_pressed(GLFW_KEY_F7)) {
+                    m_application.request_push(Game_State_Id::Iso_Capture);
+                    return;
+                }
                 game.handle_gameplay_input();
                 return;
             }
@@ -455,6 +460,16 @@ namespace {
 
         void update(float delta_time) override {
             Game& game = m_application.get_game();
+            // Отладочный хук для автотестов: OPTICRAFT_ISO_AUTOTEST=1 сам запускает изометрический
+            // снимок через пару секунд после входа в мир (после него игра закрывается, см.
+            // Game::poll_iso_capture_result).
+            if (!m_iso_autotest_done && std::getenv("OPTICRAFT_ISO_AUTOTEST")) {
+                m_iso_autotest_timer += delta_time;
+                if (m_iso_autotest_timer > 3.0f) {
+                    m_iso_autotest_done = true;
+                    m_application.request_push(Game_State_Id::Iso_Capture);
+                }
+            }
             game.update_chat(delta_time); // тикает и на паузе: строки лога затухают
             game.update_gameplay(delta_time, !m_is_paused,
                                  !m_inventory_open && !game.is_container_open() && !game.is_chat_open());
@@ -475,6 +490,43 @@ namespace {
         bool m_is_paused{false};
         bool m_inventory_open{false};
         bool m_was_container_open{false};
+        bool m_iso_autotest_done{false};
+        float m_iso_autotest_timer{0.0f};
+    };
+
+    // ------------------------------------------------------------------------
+    //  Изометрический снимок мира (F7): поверх игры, мир стоит, показывается прогресс
+    // ------------------------------------------------------------------------
+    class State_Iso_Capture final : public I_Game_State {
+    public:
+        using I_Game_State::I_Game_State;
+
+        Game_State_Id get_id() const override { return Game_State_Id::Iso_Capture; }
+
+        void on_enter() override {
+            Game& game = m_application.get_game();
+            game.set_gameplay_input_active(false);
+            if (!game.start_iso_capture()) m_application.request_pop();
+        }
+
+        void handle_input() override {
+            Game& game = m_application.get_game();
+            if (game.is_key_pressed(GLFW_KEY_ESCAPE)) {
+                game.cancel_iso_capture();
+                m_application.request_pop();
+            }
+        }
+
+        void update(float) override {
+            Game& game = m_application.get_game();
+            game.update_iso_capture();
+            // Запись PNG идёт уже в фоне — игру можно продолжать.
+            if (!game.is_iso_capture_busy()) m_application.request_pop();
+        }
+
+        void render() override {
+            m_application.get_game().render_iso_capture_overlay();
+        }
     };
 
     // ------------------------------------------------------------------------
@@ -714,6 +766,8 @@ std::unique_ptr<I_Game_State> Application::make_state(Game_State_Id id) {
             return std::make_unique<State_Playing>(*this);
         case Game_State_Id::Settings_Menu:
             return std::make_unique<State_Settings_Menu>(*this);
+        case Game_State_Id::Iso_Capture:
+            return std::make_unique<State_Iso_Capture>(*this);
     }
     return nullptr;
 }

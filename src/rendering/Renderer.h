@@ -96,8 +96,14 @@ private:
     size_t m_last_rendered_section_count = 0;
     size_t m_last_culled_section_count = 0;
     size_t m_last_occluded_section_count = 0;
+    // false — рисовать все секции, попавшие во фрустум, без occlusion-запросов. Нужно для
+    // изометрического снимка: результаты запросов относятся к камере игрока, а не к камере снимка.
+    bool m_occlusion_enabled = true;
 
 public:
+    void set_occlusion_enabled(bool enabled) { m_occlusion_enabled = enabled; }
+    bool is_occlusion_enabled() const { return m_occlusion_enabled; }
+
     Renderer();
     ~Renderer();
 

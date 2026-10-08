@@ -444,10 +444,12 @@ void Renderer::render_chunks(const std::vector<Renderable_Chunk>& chunks,
                 camera_position.z >= section_min.z && camera_position.z <= section_max.z;
 
             Section_Occlusion_State& occ = gl_res.occlusion[section_index];
-            poll_occlusion_result(occ);
-            if (camera_inside_section) occ.visible = true;
+            if (m_occlusion_enabled) {
+                poll_occlusion_result(occ);
+                if (camera_inside_section) occ.visible = true;
+            }
 
-            if (occ.visible) {
+            if (!m_occlusion_enabled || occ.visible) {
                 draw_mesh_range(gl_res.solid_vao, section.solid_start, section.solid_count);
                 ++m_last_rendered_section_count;
                 any_section_drawn = true;
@@ -495,6 +497,7 @@ void Renderer::render_chunks(const std::vector<Renderable_Chunk>& chunks,
     //    issue_occlusion_query for why the bias is negative — push toward the camera, not
     //    away), not world-space units, so unlike a geometric grow alone it stays effective
     //    regardless of distance from the camera.
+    if (m_occlusion_enabled) {
     m_occlusion_shader_ptr->use();
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_FALSE);
@@ -543,6 +546,7 @@ void Renderer::render_chunks(const std::vector<Renderable_Chunk>& chunks,
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDisable(GL_POLYGON_OFFSET_FILL);
     glEnable(GL_CULL_FACE);
+    } // m_occlusion_enabled
     m_shader_ptr->use();
     std::stable_sort(transparent_chunks.begin(), transparent_chunks.end(),
         [&camera_position](const Renderable_Chunk* lhs, const Renderable_Chunk* rhs) {

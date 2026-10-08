@@ -50,6 +50,7 @@ set(SOURCES
 
         # rendering
         ${SRC_DIR}/rendering/Mesh.cpp
+        ${SRC_DIR}/rendering/Isometric_Capture.cpp
         ${SRC_DIR}/rendering/Renderer.cpp
         ${SRC_DIR}/rendering/Shader.cpp
         ${SRC_DIR}/rendering/Texture_Atlas.cpp
@@ -136,6 +137,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 
         ${SRC_DIR}/rendering/Mesh.h
         ${SRC_DIR}/rendering/Frustum.h
+        ${SRC_DIR}/rendering/Isometric_Capture.h
         ${SRC_DIR}/rendering/Renderer.h
         ${SRC_DIR}/rendering/Shader.h
         ${SRC_DIR}/rendering/Texture_Atlas.h

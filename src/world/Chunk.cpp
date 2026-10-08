@@ -354,7 +354,8 @@ Chunk_Meshes build_chunk_mesh(const Chunk_Block_Grid& blocks,
                               int chunk_x, int chunk_y, int chunk_z,
                               const Chunk_Neighbor_Lookup& neighbor_lookup,
                               const Chunk_Light_Lookup& light_lookup,
-                              const Texture_Atlas& atlas) {
+                              const Texture_Atlas& atlas,
+                              bool only_positive_faces) {
     // UV блоков теперь резолвятся один раз при загрузке blocks.json (см.
     // Block_Registry::load_from_file → resolve_sprite_uv) и лежат готовыми
     // vec4 прямо в Block_Properties — так что здесь atlas для самой геометрии
@@ -414,11 +415,11 @@ Chunk_Meshes build_chunk_mesh(const Chunk_Block_Grid& blocks,
                     };
                     const uint8_t meta = props.uses_meta ? blocks.get_meta(x, y, z) : 0;
                     if (visible(1, 0, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 1, 0, 0, block, face_light(1,0,0), meta);
-                    if (visible(-1, 0, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, -1, 0, 0, block, face_light(-1,0,0), meta);
+                    if (!only_positive_faces && visible(-1, 0, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, -1, 0, 0, block, face_light(-1,0,0), meta);
                     if (visible(0, 1, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, 1, 0, block, face_light(0,1,0), meta);
-                    if (visible(0, -1, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, -1, 0, block, face_light(0,-1,0), meta);
+                    if (!only_positive_faces && visible(0, -1, 0)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, -1, 0, block, face_light(0,-1,0), meta);
                     if (visible(0, 0, 1)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, 0, 1, block, face_light(0,0,1), meta);
-                    if (visible(0, 0, -1)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, 0, -1, block, face_light(0,0,-1), meta);
+                    if (!only_positive_faces && visible(0, 0, -1)) add_solid_face_data(meshes, chunk_x, chunk_y, chunk_z, x, y, z, 0, 0, -1, block, face_light(0,0,-1), meta);
                 }
             }
         }
